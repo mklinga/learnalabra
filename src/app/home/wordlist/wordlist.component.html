@@ -1,0 +1,7 @@
+<div>
+  <ul>
+    <li *ngFor="let word of wordLists[viewLanguage]">
+      <span (click)="onClick(word.id)">{{ word.value }}</span>
+    </li>
+  </ul>
+</div>
