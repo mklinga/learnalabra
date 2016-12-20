@@ -1,7 +1,7 @@
-<div>
+<div class='wordlist-container' *ngIf="!loading">
   <ul>
     <li *ngFor="let word of wordLists[viewLanguage]">
-      <span (click)="onClick(word.id)">{{ word.value }}</span>
+      <word-detail [id]="word.id">{{ word.value }}</word-detail>
     </li>
   </ul>
 </div>

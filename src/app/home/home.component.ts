@@ -15,8 +15,4 @@ export class HomeComponent {
   activeWordId = null;
 
   constructor(public appState: AppState) {}
-
-  handleWordClick (wordId) {
-    this.activeWordId = wordId;
-  }
 }

@@ -14,16 +14,14 @@ import { Words } from '../words';
 export class WordlistComponent {
   wordLists = { es: [], en: [] };
   viewLanguage = 'es';
+  loading = true;
 
-  @Output() onWordClick = new EventEmitter();
-  constructor(public appState: AppState, public words: Words) { }
+  constructor(public appState: AppState, public words: Words) {}
 
   ngOnInit() {
-    this.wordLists = this.words.getWordListsByLanguage();
-    console.log(this.wordLists);
-  }
-
-  onClick (id) {
-    this.onWordClick.emit(id);
+    this.words.loadWordsFromServer().subscribe(data => {
+      this.loading = false;
+      this.wordLists = this.words.getWordListsByLanguage();
+    });
   }
 }

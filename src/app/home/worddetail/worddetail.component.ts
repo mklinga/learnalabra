@@ -18,22 +18,10 @@ export class WordDetailComponent {
   currentWord;
   currentTranslation;
 
-  constructor(public appState: AppState, public words: Words) {
-    console.log(this.wordId);
-    if (this.wordId) {
-      this.updateCurrentWord(this.wordId);
-    }
-  }
+  constructor(public appState: AppState, public words: Words) {}
 
-  updateCurrentWord(id: number) {
-    this.currentWord = this.words.getWord(id);
-    this.currentTranslation = this.words.findTranslation(id);
+  ngOnInit () {
+    this.currentWord = this.words.getWord(this.wordId);
+    this.currentTranslation = this.words.findTranslation(this.wordId);
   }
-
-  ngOnChanges(changes) {
-    if (changes.wordId && changes.wordId.currentValue) {
-      this.updateCurrentWord(changes.wordId.currentValue);
-    }
-  }
-
 }

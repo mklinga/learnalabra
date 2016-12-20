@@ -1,8 +1,13 @@
-<div>
-  <div *ngIf="currentWord">
-    <h2>{{ currentWord.value }}</h2>
+<div class='word-detail-container'>
+  <div class='word-and-translation'>
+    <div *ngIf="currentWord" class='current-word'>
+      <span>{{ currentWord.value }}</span>
+    </div>
+    <div *ngIf="currentTranslation" class='current-translation'>
+      <span>{{ currentTranslation.value }}</span>
+    </div>
   </div>
-  <div *ngIf="currentTranslation">
-    <h2>{{ currentTranslation.value }}</h2>
+  <div class='example'>
+
   </div>
 </div>
