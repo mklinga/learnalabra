@@ -1,4 +1,4 @@
-<div class='wordlist-container' *ngIf="!loading">
+<div class='wordlist-container'>
   <ul>
     <li *ngFor="let word of wordLists[viewLanguage]">
       <word-detail [id]="word.id">{{ word.value }}</word-detail>

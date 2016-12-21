@@ -1,0 +1,26 @@
+<div class='add-new-word'>
+  <div *ngIf="!dialogIsOpen">
+    <a href (click)="openDialog($event)">Add new</a>
+  </div>
+  <div *ngIf="dialogIsOpen">
+  <form (ngSubmit)="onSubmit(theForm)" #theForm="ngForm">
+    <div class="form-group">
+      <label for="spanish-word">Word in spanish</label>
+      <input class="form-control" name="spanish-word" required [(ngModel)]="data.word.es">
+    </div>
+    <div class="form-group">
+      <label for="english-word">Word in english</label>
+      <input class="form-control" name="english-word" required [(ngModel)]="data.word.en">
+    </div>
+    <div class="form-group">
+      <label for="spanish-sentence">Sentence in spanish</label>
+      <input class="form-control" name="spanish-sentence" required [(ngModel)]="data.sentence.es">
+    </div>
+    <div class="form-group">
+      <label for="english-sentence">Sentence in english</label>
+      <input class="form-control" name="english-sentence" required [(ngModel)]="data.sentence.en">
+    </div>
+    <button type="submit" [disabled]="!theForm.form.valid">Save new word</button>
+  </form>
+  </div>
+</div>

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
+import { Headers, Http, RequestOptions, Response } from '@angular/http';
 
 let WORDS = [];
 
@@ -24,12 +24,22 @@ export class Words {
     return WORDS;
   }
 
+  setWordsFromResponse (response) {
+    const body = response.json();
+    return this.setWords(body);
+  }
+
   loadWordsFromServer () {
     return this.http.get('http://localhost:3030/words')
-      .map(response => {
-        const body = response.json();
-        return this.setWords(body);
-      });
+      .map(this.setWordsFromResponse.bind(this));
+  }
+
+  saveNewWord (word) {
+    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let options = new RequestOptions({ headers: headers });
+
+    return this.http.post('http://localhost:3030/words', word, options)
+      .map(this.setWordsFromResponse.bind(this));
   }
 
   getWordListsByLanguage() {

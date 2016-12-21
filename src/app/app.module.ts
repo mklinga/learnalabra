@@ -16,6 +16,7 @@ import { APP_RESOLVER_PROVIDERS } from './app.resolver';
 import { AppState, InternalStateType } from './app.service';
 import { HomeComponent } from './home';
 import { NoContentComponent } from './no-content';
+import { AddNewWordComponent } from './home/add-new-word';
 import { WordlistComponent } from './home/wordlist';
 import { WordDetailComponent } from './home/worddetail';
 import { XLarge } from './home/x-large';
@@ -38,11 +39,12 @@ type StoreType = {
 @NgModule({
   bootstrap: [ AppComponent ],
   declarations: [
+    AddNewWordComponent,
     AppComponent,
     HomeComponent,
     NoContentComponent,
-    WordlistComponent,
     WordDetailComponent,
+    WordlistComponent,
     XLarge
   ],
   imports: [ // import Angular's modules
