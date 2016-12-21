@@ -30,6 +30,10 @@ export class AddNewWordComponent {
 
   onSubmit (form) {
     this.words.saveNewWord(this.data)
-      .subscribe(response => this.onAddNewWord.emit('saved'));
+      .subscribe(response => {
+        this.data = { word: {}, sentence: {} };
+        this.dialogIsOpen = false;
+        this.onAddNewWord.emit('saved');
+      });
   }
 }
