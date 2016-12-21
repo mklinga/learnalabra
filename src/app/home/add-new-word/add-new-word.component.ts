@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ViewChild } from '@angular/core';
 
 import { Words } from '../words';
 
@@ -14,7 +14,12 @@ import { Words } from '../words';
 export class AddNewWordComponent {
 
   @Output('onAddNewWord') onAddNewWord = new EventEmitter();
+
+  @ViewChild('firstInput') firstInput;
+
   dialogIsOpen: boolean = false;
+  addMultiple: boolean = false;
+  needsResetFocus: boolean = true;
   data;
 
   constructor(public words: Words) {}
@@ -25,14 +30,26 @@ export class AddNewWordComponent {
 
   openDialog (event) {
     event.preventDefault();
+    this.needsResetFocus = true;
     this.dialogIsOpen = true;
+  }
+
+  ngAfterViewChecked() {
+    if (this.needsResetFocus && this.firstInput) {
+      this.firstInput.nativeElement.focus();
+      this.needsResetFocus = false;
+    }
   }
 
   onSubmit (form) {
     this.words.saveNewWord(this.data)
       .subscribe(response => {
         this.data = { word: {}, sentence: {} };
-        this.dialogIsOpen = false;
+        if (this.addMultiple) {
+          this.firstInput.nativeElement.focus();
+        } else {
+          this.dialogIsOpen = false;
+        }
         this.onAddNewWord.emit('saved');
       });
   }

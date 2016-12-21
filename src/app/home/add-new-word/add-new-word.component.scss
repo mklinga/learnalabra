@@ -1,3 +1,30 @@
 .add-new-word {
-    display: inline-block;
+  .dialog {
+    border: 1px solid #ddd;
+    padding: 25px;
+
+    input {
+      margin-top: 10px;
+    }
+
+    form {
+      .form-group {
+        padding: 5px;
+      }
+
+      label {
+        display: block;
+        margin-top: 10px;
+      }
+
+      input {
+        padding: 5px;
+        width: 100%;
+      }
+
+      button {
+        margin-top: 10px;
+      }
+    }
+  }
 }
