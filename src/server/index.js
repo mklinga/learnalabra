@@ -3,23 +3,24 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var app = express();
 
+var WORDS = '../assets/words.json';
+var SENTENCES = '../assets/sentences.json';
 var words = [], sentences = [];
 
 function loadWordsAndSentences () {
-  var WORDS = '../assets/words.json';
-  var SENTENCES = '../assets/sentences.json';
-
-  return new Promise(function (resolve, reject) {
-
-    console.log('Reading words from', WORDS);
-    fs.readFile(WORDS, 'utf8', function (err, data) {
-      if (err) {
-        console.error('Error reading the words.json!');
-        reject(err);
-      }
-      words = JSON.parse(data);
-      console.log(words.length + ' words loaded');
-
+  return Promise.all([
+    new Promise(function (resolve, reject) {
+      console.log('Reading words from', WORDS);
+      fs.readFile(WORDS, 'utf8', function (err, data) {
+        if (err) {
+          console.error('Error reading the words.json!');
+          reject(err);
+        }
+        words = JSON.parse(data);
+        console.log(words.length + ' words loaded');
+      });
+    }),
+    new Promise(function (resolve, reject) {
       console.log('Reading sentences from', SENTENCES);
       fs.readFile(SENTENCES, 'utf8', function (err, data) {
         if (err) {
@@ -30,9 +31,35 @@ function loadWordsAndSentences () {
         console.log(sentences.length + ' sentences loaded');
         resolve();
       });
-    });
-  });
+    })
+  ]);
 }
+
+function saveWordsAndSentences () {
+  return Promise.all([
+    new Promise(function (resolve, reject) {
+      fs.writeFile(WORDS, JSON.stringify(words), function (err) {
+        if (err) {
+          console.error('Error writing the words.json!');
+          reject(err);
+        }
+        console.log('Saving words ok!');
+        resolve();
+      });
+    }),
+    new Promise(function (resolve, reject) {
+      fs.writeFile(SENTENCES, JSON.stringify(sentences), function (err) {
+        if (err) {
+          console.error('Error writing the sentences.json!');
+          reject(err);
+        }
+        console.log('Saving sentences ok!');
+        resolve();
+      });
+    })
+  ]);
+}
+
 
 function getWords () {
   return words;
@@ -106,6 +133,8 @@ function saveNewWord (content) {
 
   words = words.concat(newWords);
   sentences = sentences.concat(newSentences);
+
+  saveWordsAndSentences();
 }
 
 app.use(bodyParser.json())

@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 import { Words } from '../words';
 
@@ -13,6 +13,7 @@ import { Words } from '../words';
 
 export class AddNewWordComponent {
 
+  @Output('onAddNewWord') onAddNewWord = new EventEmitter();
   dialogIsOpen: boolean = false;
   data;
 
@@ -29,6 +30,6 @@ export class AddNewWordComponent {
 
   onSubmit (form) {
     this.words.saveNewWord(this.data)
-      .subscribe(response => console.log(response));
+      .subscribe(response => this.onAddNewWord.emit('saved'));
   }
 }
