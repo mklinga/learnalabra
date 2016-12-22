@@ -1,6 +1,6 @@
 <div class='wordlist-container'>
   <ul>
-    <li *ngFor="let word of wordLists[viewLanguage]">
+    <li *ngFor="let word of wordLists">
       <word-detail [id]="word.id">{{ word.value }}</word-detail>
       <div class='related-sentences' *ngFor="let sentence of relatedSentences[word.id]">
         <span class='sentence'>{{ sentence.value }}</span>

@@ -9,7 +9,6 @@ export class WordlistComponent {
 
   @Input('words') wordLists;
   @Input('sentences') relatedSentences;
-  viewLanguage = 'es';
 
   constructor () {}
 }

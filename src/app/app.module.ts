@@ -18,6 +18,7 @@ import { HomeComponent } from './home';
 import { NoContentComponent } from './no-content';
 import { AddNewWordComponent } from './home/add-new-word';
 import { WordlistComponent } from './home/wordlist';
+import { WordFilterComponent } from './home/word-filter';
 import { WordDetailComponent } from './home/worddetail';
 import { XLarge } from './home/x-large';
 
@@ -44,6 +45,7 @@ type StoreType = {
     HomeComponent,
     NoContentComponent,
     WordDetailComponent,
+    WordFilterComponent,
     WordlistComponent,
     XLarge
   ],

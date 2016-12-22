@@ -17,14 +17,31 @@ import { Words } from './words';
   templateUrl: './home.component.html'
 })
 export class HomeComponent {
+
+  viewLanguage = 'es';
   wordLists = { es: [], en: [] };
   relatedSentences = {};
   loading: boolean = true;
+  textFilter: string = '';
+
+  filteredWordList = [];
 
   constructor(public words: Words, public sentences: Sentences) {}
 
   ngOnInit() {
     this.refreshWords();
+  }
+
+  onWordFilterChange (filter) {
+    // Escape the string, as it's used in regexp
+    this.textFilter = filter.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&');
+    this.updateFilteredWordList();
+  }
+
+  updateFilteredWordList () {
+    const matcher = new RegExp(this.textFilter, 'i');
+    this.filteredWordList = this.wordLists[this.viewLanguage]
+      .filter(word => matcher.test(word.value));
   }
 
   refreshWords () {
@@ -37,6 +54,7 @@ export class HomeComponent {
       this.loading = false;
       this.wordLists = this.words.getWordListsByLanguage();
       this.relatedSentences = this.words.getRelatedSentencesMap();
+      this.updateFilteredWordList();
     });
   }
 }
