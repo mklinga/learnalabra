@@ -134,7 +134,7 @@ function saveNewWord (content) {
   words = words.concat(newWords);
   sentences = sentences.concat(newSentences);
 
-  /aveWordsAndSentences();
+  saveWordsAndSentences();
 }
 
 app.use(bodyParser.json())
