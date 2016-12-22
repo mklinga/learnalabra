@@ -1,140 +1,27 @@
-var fs = require('fs');
 var express = require('express');
 var bodyParser = require('body-parser');
 var app = express();
 
-var WORDS = '../assets/words.json';
-var SENTENCES = '../assets/sentences.json';
-var words = [], sentences = [];
+var wordsService = require('./words');
+var sentenceService = require('./sentence');
 
 function loadWordsAndSentences () {
-  return Promise.all([
-    new Promise(function (resolve, reject) {
-      console.log('Reading words from', WORDS);
-      fs.readFile(WORDS, 'utf8', function (err, data) {
-        if (err) {
-          console.error('Error reading the words.json!');
-          reject(err);
-        }
-        words = JSON.parse(data);
-        console.log(words.length + ' words loaded');
-      });
-    }),
-    new Promise(function (resolve, reject) {
-      console.log('Reading sentences from', SENTENCES);
-      fs.readFile(SENTENCES, 'utf8', function (err, data) {
-        if (err) {
-          console.error('Error reading the sentences.json!');
-          reject(err);
-        }
-        sentences = JSON.parse(data);
-        console.log(sentences.length + ' sentences loaded');
-        resolve();
-      });
-    })
-  ]);
+  return Promise.all([ wordsService.loadWords(), sentenceService.loadSentences() ]);
 }
 
 function saveWordsAndSentences () {
-  return Promise.all([
-    new Promise(function (resolve, reject) {
-      fs.writeFile(WORDS, JSON.stringify(words), function (err) {
-        if (err) {
-          console.error('Error writing the words.json!');
-          reject(err);
-        }
-        console.log('Saving words ok!');
-        resolve();
-      });
-    }),
-    new Promise(function (resolve, reject) {
-      fs.writeFile(SENTENCES, JSON.stringify(sentences), function (err) {
-        if (err) {
-          console.error('Error writing the sentences.json!');
-          reject(err);
-        }
-        console.log('Saving sentences ok!');
-        resolve();
-      });
-    })
-  ]);
-}
-
-
-function getWords () {
-  return words;
-}
-
-function getSentences () {
-  return sentences;
+  return Promise.all([ wordsService.saveWords(), sentenceService.saveSentences() ]);
 }
 
 function saveNewWord (content) {
-  // content: {
-  //   word: { en: '...', es: '...' },
-  //   sentence: { en: '...', es: '...' }
-  // }
 
-  var lastWordId = words.reduce(function(id, word) { return Math.max(id, word.id); }, 0);
-  var lastSentenceId = sentences.reduce(function(id, sentence) { return Math.max(id, sentence.id); }, 0);
+  var newWords = wordsService.addNewWord(content.word);
+  var newSentences = sentenceService.addNewSentence(content.sentences);
 
-  // Assign id's to the objects
-  var contentWithIds = {};
-  
-  contentWithIds.word = Object.keys(content.word)
-    .map(function (key) {
-      var result = {};
-      result[key] = { value: content.word[key], id: ++lastWordId };
-      return result;
-    })
-    .reduce(function (result, word) {
-      return Object.assign(result, word) 
-    }, {});
+  // assign translations
+  // assign sentences to words
 
-  contentWithIds.sentence = Object.keys(content.sentence)
-    .map(function (key) {
-      var result = {};
-      result[key] = { value: content.sentence[key], id: ++lastSentenceId };
-      return result;
-    })
-    .reduce(function (result, sentence) {
-      return Object.assign(result, sentence) 
-    }, {});
-
-  var newSentences = Object.keys(contentWithIds.sentence).map(function(key) {
-    var translations = Object.keys(contentWithIds.sentence)
-      .filter(function (innerKey) { return innerKey !== key; })
-      .map(function (key) { return contentWithIds.sentence[key].id });
-
-    return ({
-      id: contentWithIds.sentence[key].id,
-      lang: key,
-      value: contentWithIds.sentence[key].value,
-      translations: translations
-    });
-  });
-
-  var newWords = Object.keys(contentWithIds.word).map(function(key) {
-    var correspondingSentences = newSentences.filter(function (sentence) {
-      return sentence.lang === key;
-    });
-    var translations = Object.keys(contentWithIds.word)
-      .filter(function (innerKey) { return innerKey !== key; })
-      .map(function (key) { return contentWithIds.word[key].id });
-
-    return ({
-      id: contentWithIds.word[key].id,
-      lang: key,
-      value: contentWithIds.word[key].value,
-      sentences: correspondingSentences.map(function (sentence) { return sentence.id; }),
-      translations: translations
-    });
-  });
-
-  words = words.concat(newWords);
-  sentences = sentences.concat(newSentences);
-
-  saveWordsAndSentences();
+  //saveWordsAndSentences();
 }
 
 app.use(bodyParser.json())
@@ -145,16 +32,21 @@ app.use(function(req, res, next) {
 });
 
 app.get('/words', function (req, res) {
-  return res.json(getWords());
-});
-
-app.get('/sentences', function (req, res) {
-  return res.json(getSentences());
+  return res.json(wordsService.getWords());
 });
 
 app.post('/words', function (req, res) {
-  saveNewWord(req.body);
-  res.json(req.body)
+  var newWords = wordsService.addNewWord(req.body);
+  res.json(newWords);
+});
+
+app.get('/sentences', function (req, res) {
+  return res.json(sentenceService.getSentences());
+});
+
+app.post('/sentences', function (req, res) {
+  var newSentences = sentenceService.addNewSentence(req.body);
+  res.json(newSentences)
 });
 
 app.listen(3030, function () {

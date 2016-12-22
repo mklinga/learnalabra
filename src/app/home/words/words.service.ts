@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Rx';
 import { Headers, Http, RequestOptions, Response } from '@angular/http';
 
 let WORDS = [];
@@ -21,6 +22,7 @@ export class Words {
 
   setWords (words) {
     WORDS = words;
+    console.log('WORDS', WORDS);
     return WORDS;
   }
 
@@ -34,12 +36,17 @@ export class Words {
       .map(this.setWordsFromResponse.bind(this));
   }
 
-  saveNewWord (word) {
+  saveNewWord (content) {
     let headers = new Headers({ 'Content-Type': 'application/json' });
     let options = new RequestOptions({ headers: headers });
 
-    return this.http.post('http://localhost:3030/words', word, options)
-      .map(this.setWordsFromResponse.bind(this));
+    const { word, sentence } = content;
+
+    return Observable.forkJoin(
+      this.http.post('http://localhost:3030/words', word, options),
+      this.http.post('http://localhost:3030/sentences', sentence, options)
+    )
+    .map(data => this.setWordsFromResponse(data[0]));
   }
 
   getWordListsByLanguage() {
