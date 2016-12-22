@@ -6,7 +6,6 @@ var lastWordId;
 
 function loadWords() {
   return new Promise(function (resolve, reject) {
-    console.log('Reading words from', WORDS);
     fs.readFile(WORDS, 'utf8', function (err, data) {
       if (err) {
         console.error('Error reading the words.json!');
@@ -49,21 +48,43 @@ function addNewWord (word) {
       });
     });
 
-  console.log('Adding new words!', newWordsArray);
   words = words.concat(newWordsArray);
-  return words;
+  return newWordsArray;
 }
 
-function assignTranslations(words) {
+function assignTranslations(translations) {
+  // We expect to get an array of words which mean the same thing in different languages
+  var translationIds = translations.map(function (word) { return word.id });
+  words = words.map(function(word) {
+    if (translationIds.indexOf(word.id) === -1) {
+      return word;
+    }
 
+    var wordTranslations = translationIds.filter(function(id) { return id !== word.id; });
+    return Object.assign(
+      word,
+      { translations: wordTranslations }
+    );
+  });
 }
 
-function assignSentence(word, sentence) {
+function assignSentence(assignWord, assignSentence) {
+  words = words.map(function (word) {
+    if (word.id !== assignWord.id) {
+      return word;
+    }
 
+    var sentences = word.sentences || [];
+    sentences = sentences.concat(assignSentence.id);
+    
+    return Object.assign(word, { sentences: sentences });
+  });
 }
 
 module.exports = {
   addNewWord: addNewWord,
+  assignTranslations: assignTranslations,
+  assignSentence: assignSentence,
   getWords: getWords,
   loadWords: loadWords,
   saveWords: saveWords

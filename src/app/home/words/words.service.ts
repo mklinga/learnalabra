@@ -22,7 +22,6 @@ export class Words {
 
   setWords (words) {
     WORDS = words;
-    console.log('WORDS', WORDS);
     return WORDS;
   }
 
@@ -46,7 +45,16 @@ export class Words {
       this.http.post('http://localhost:3030/words', word, options),
       this.http.post('http://localhost:3030/sentences', sentence, options)
     )
-    .map(data => this.setWordsFromResponse(data[0]));
+    .flatMap(data => {
+      const words = data[0].json();
+      const sentences = data[1].json();
+
+      return this.http.post(
+        'http://localhost:3030/bind-words-and-sentences',
+        { words, sentences },
+        options
+      );
+    });
   }
 
   getWordListsByLanguage() {

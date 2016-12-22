@@ -9,7 +9,6 @@ var lastSentenceId;
 
 function loadSentences() {
   return new Promise(function (resolve, reject) {
-    console.log('Reading sentences from', SENTENCES);
     fs.readFile(SENTENCES, 'utf8', function (err, data) {
       if (err) {
         console.error('Error reading the sentences.json!');
@@ -53,10 +52,8 @@ function addNewSentence (sentence) {
       });
     });
 
-  console.log('Adding new sentences!', newSentenceArray);
-
   sentences = sentences.concat(newSentenceArray);
-  return sentences;
+  return newSentenceArray;
 }
 
 function assignTranslations(sentences) {
