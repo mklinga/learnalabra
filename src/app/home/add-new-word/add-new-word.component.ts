@@ -20,12 +20,14 @@ export class AddNewWordComponent {
   dialogIsOpen: boolean = false;
   addMultiple: boolean = false;
   needsResetFocus: boolean = true;
+  theWordAlreadyExists: boolean = false;
   data;
 
   constructor(public words: Words) {}
 
   ngOnInit () {
     this.data = { word: {}, sentence: {} };
+    this.theWordAlreadyExists = false;
   }
 
   openDialog (event) {
@@ -39,6 +41,10 @@ export class AddNewWordComponent {
       this.firstInput.nativeElement.focus();
       this.needsResetFocus = false;
     }
+  }
+
+  checkForExistingWord(event) {
+    this.theWordAlreadyExists = !!(this.words.findByValue(event.target.value));
   }
 
   onSubmit (form) {

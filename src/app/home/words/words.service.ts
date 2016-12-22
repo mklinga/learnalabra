@@ -86,4 +86,8 @@ export class Words {
   getRelatedSentences (ids: Array<number>) {
     return this.sentences.getSentences(ids);
   }
+
+  findByValue (value: string) {
+    return WORDS.find(word => word.value.toLowerCase() === value.toLowerCase());
+  }
 }

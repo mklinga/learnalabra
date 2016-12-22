@@ -9,7 +9,8 @@
     <form (ngSubmit)="onSubmit(theForm)" #theForm="ngForm">
       <div class="form-group">
         <label for="spanish-word">Word in spanish</label>
-        <input #firstInput class="form-control" name="spanish-word" required [(ngModel)]="data.word.es">
+        <input (keyup)="checkForExistingWord($event)" #firstInput class="form-control" name="spanish-word" required [(ngModel)]="data.word.es">
+        <span class='warning' *ngIf="theWordAlreadyExists">The word already exists!</span>
       </div>
       <div class="form-group">
         <label for="english-word">Word in english</label>
