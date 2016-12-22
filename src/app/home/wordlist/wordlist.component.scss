@@ -1,6 +1,11 @@
 .wordlist-container {
-    ul li {
-        list-style: none;
-        padding: 0;
-    }
+  ul li {
+    list-style: none;
+    padding: 0;
+  }
+
+  div.related-sentences {
+    color: #bbb;
+    margin: 5px 5px 10px 5px;
+  }
 }

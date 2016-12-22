@@ -8,6 +8,7 @@ import { Component, Input } from '@angular/core';
 export class WordlistComponent {
 
   @Input('words') wordLists;
+  @Input('sentences') relatedSentences;
   viewLanguage = 'es';
 
   constructor () {}

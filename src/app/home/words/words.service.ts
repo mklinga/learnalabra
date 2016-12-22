@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Rx';
 import { Headers, Http, RequestOptions, Response } from '@angular/http';
 
+import { Sentences } from '../sentences';
+
 let WORDS = [];
 
 const stripArticle = word => {
@@ -18,7 +20,7 @@ const stripArticle = word => {
 @Injectable()
 export class Words {
 
-  constructor(private http: Http) {}
+  constructor(private http: Http, private sentences: Sentences) {}
 
   setWords (words) {
     WORDS = words;
@@ -71,8 +73,17 @@ export class Words {
     return WORDS.find(word => word.id === id);
   }
 
+  getRelatedSentencesMap () {
+    return WORDS.reduce((result, word) => {
+      return Object.assign(result, { [word.id]: this.sentences.getSentences(word.sentences) });
+    }, {});
+  }
+
   findTranslation(id: number) {
     return WORDS.find(word => word.translation === id);
   }
 
+  getRelatedSentences (ids: Array<number>) {
+    return this.sentences.getSentences(ids);
+  }
 }
