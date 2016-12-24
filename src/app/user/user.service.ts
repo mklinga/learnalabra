@@ -2,7 +2,9 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs/Rx';
 import { Headers, Http, RequestOptions, Response } from '@angular/http';
 
-let USER = new BehaviorSubject({ id: -1, name: '', guesses: [] });
+import { User } from '../interfaces';
+
+let USER = new BehaviorSubject<User>({ id: -1, name: '', guesses: [] });
 
 @Injectable()
 export class Users {
@@ -15,9 +17,11 @@ export class Users {
     return USER;
   }
 
-  loadUserFromServer (id) {
-    return this.http.get(`http://localhost:3030/users/${id}`)
-      .map(this.setUserFromResponse.bind(this));
+  loadUserFromServer (id): Observable<BehaviorSubject<User>> {
+    const request = this.http.get(`http://localhost:3030/users/${id}`);
+    return request.map(value => {
+      return this.setUserFromResponse(value);
+    });
   }
 
   getCurrentUser() {

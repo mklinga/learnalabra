@@ -1,5 +1,7 @@
 import { Component, Input } from '@angular/core';
 
+import { QuestionWord } from '../../interfaces';
+
 @Component({
   selector: 'quiz-form',
   styleUrls: [ './quiz-form.component.scss' ],
@@ -7,7 +9,7 @@ import { Component, Input } from '@angular/core';
 })
 export class QuizFormComponent {
 
-  @Input('questions') questions;
+  @Input('questions') questions: Array<QuestionWord>;
 
   constructor() {}
 }

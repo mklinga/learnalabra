@@ -1,14 +1,9 @@
-/*
- * Angular 2 decorators and services
- */
 import { Component, ViewEncapsulation } from '@angular/core';
 
 import { Users } from './user';
 
-/*
- * App Component
- * Top Level Component
- */
+import { User } from './interfaces';
+
 @Component({
   selector: 'app',
   encapsulation: ViewEncapsulation.None,
@@ -43,11 +38,16 @@ import { Users } from './user';
   `
 })
 export class AppComponent {
-  user;
+  user: User;
 
   constructor(private users: Users) {
-    this.user = { name: '' };
+    this.user = { id: -1, name: '', guesses: [] };
+  }
+
+  ngOnInit () {
     this.users.loadUserFromServer(1)
-      .subscribe(user => { this.user = user; });
+      .subscribe(user => {
+        this.user = user.getValue();
+      });
   }
 }

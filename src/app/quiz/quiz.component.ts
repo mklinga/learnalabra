@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 
 import { Questions } from './questions';
+import { Word, QuestionWord } from '../interfaces';
 
 @Component({
   providers: [
@@ -12,7 +13,7 @@ import { Questions } from './questions';
 })
 export class QuizComponent {
 
-  currentQuestions = [];
+  currentQuestions: Array<QuestionWord> = [];
 
   constructor(public questions: Questions) {}
 
