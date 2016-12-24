@@ -5,6 +5,7 @@ var app = express();
 var wordsService = require('./words');
 var sentenceService = require('./sentence');
 var userService = require('./user');
+var questionService = require('./question');
 
 function initialize () {
   return Promise.all([
@@ -27,6 +28,10 @@ app.use(function(req, res, next) {
 
 app.get('/users/:id', function (req, res) {
   return res.json(userService.getUser(Number(req.params.id)));
+});
+
+app.get('/users/:id/questions/', function (req, res) {
+  return res.json(questionService.getSetOfQuestions(Number(req.params.id)));
 });
 
 app.post('/words', function (req, res) {
