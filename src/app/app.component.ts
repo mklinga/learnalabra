@@ -3,7 +3,7 @@
  */
 import { Component, ViewEncapsulation } from '@angular/core';
 
-import { AppState } from './app.service';
+import { Users } from './user';
 
 /*
  * App Component
@@ -12,6 +12,9 @@ import { AppState } from './app.service';
 @Component({
   selector: 'app',
   encapsulation: ViewEncapsulation.None,
+  providers: [
+    Users
+  ],
   styleUrls: [
     './app.component.scss'
   ],
@@ -23,6 +26,9 @@ import { AppState } from './app.service';
             Index
           </a>
         </span>
+        <div class='user-name-box'>
+          Heya, <span class='user-name'>{{ user.name }}</span>
+        </div>
       </nav>
 
       <main>
@@ -32,14 +38,11 @@ import { AppState } from './app.service';
   `
 })
 export class AppComponent {
-  name = 'Learn the word';
+  user;
 
-  constructor(
-    public appState: AppState) {
+  constructor(private users: Users) {
+    this.user = { name: '' };
+    this.users.loadUserFromServer(1)
+      .subscribe(user => { this.user = user; });
   }
-
-  ngOnInit() {
-    console.log('Initial App State', this.appState.state);
-  }
-
 }

@@ -14,3 +14,10 @@ div.container {
 span.active {
   background-color: gray;
 }
+
+div.user-name-box {
+  float: right;
+  span.user-name {
+    font-weight: bold;
+  }
+}

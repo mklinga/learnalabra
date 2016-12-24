@@ -4,9 +4,14 @@ var app = express();
 
 var wordsService = require('./words');
 var sentenceService = require('./sentence');
+var userService = require('./user');
 
-function loadWordsAndSentences () {
-  return Promise.all([ wordsService.loadWords(), sentenceService.loadSentences() ]);
+function initialize () {
+  return Promise.all([
+    wordsService.loadWords(),
+    sentenceService.loadSentences(),
+    userService.loadUsers()
+  ]);
 }
 
 function saveWordsAndSentences () {
@@ -18,6 +23,16 @@ app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
+});
+
+app.get('/users/:id', function (req, res) {
+  return res.json(userService.getUser(Number(req.params.id)));
+});
+
+app.post('/words', function (req, res) {
+  var newWords = wordsService.addNewWord(req.body);
+  wordsService.assignTranslations(newWords);
+  res.json(newWords);
 });
 
 app.get('/words', function (req, res) {
@@ -53,7 +68,7 @@ app.post('/bind-words-and-sentences', function (req, res) {
 })
 
 app.listen(3030, function () {
-  loadWordsAndSentences()
+  initialize()
     .then(function () {
       console.log('Learnalabra-API listening on port 3030!');
     });
