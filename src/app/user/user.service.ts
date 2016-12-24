@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Rx';
+import { BehaviorSubject, Observable } from 'rxjs/Rx';
 import { Headers, Http, RequestOptions, Response } from '@angular/http';
 
-let USER = {};
+let USER = new BehaviorSubject({ id: -1, name: '', guesses: [] });
 
 @Injectable()
 export class Users {
@@ -11,7 +11,7 @@ export class Users {
 
   setUserFromResponse (response) {
     const body = response.json();
-    USER = body;
+    USER.next(body);
     return USER;
   }
 
@@ -20,7 +20,7 @@ export class Users {
       .map(this.setUserFromResponse.bind(this));
   }
 
-  getUser(id) {
+  getCurrentUser() {
     return USER;
   }
 }

@@ -36,7 +36,25 @@ function getUser (id) {
   return users.find(function (user) { return user.id === id; });
 }
 
+function addGuess (userId, wordId, result) {
+  users.map(function (user) {
+    if (user.id !== userId) {
+      return user;
+    }
+
+    var newGuess = {
+      correct: result,
+      wordId: wordId,
+      guessed_at: Date.now()
+    };
+
+    user.guesses = user.guesses || [];
+    user.guesses.push(newGuess);
+  });
+}
+
 module.exports = {
+  addGuess: addGuess,
   loadUsers: loadUsers,
   saveUsers: saveUsers,
   getUser: getUser

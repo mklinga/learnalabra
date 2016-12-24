@@ -34,6 +34,15 @@ app.get('/users/:id/questions/', function (req, res) {
   return res.json(questionService.getSetOfQuestions(Number(req.params.id)));
 });
 
+app.post('/users/:id/guesses', function (req, res) {
+  var guesses = req.body.guesses;
+  guesses.forEach(function (guess) {
+    userService.addGuess(guess)
+  });
+  userService.saveUsers();
+  res.sendStatus(200).end();
+})
+
 app.post('/words', function (req, res) {
   var newWords = wordsService.addNewWord(req.body);
   wordsService.assignTranslations(newWords);

@@ -2,19 +2,29 @@ var userService = require('./user');
 var wordService = require('./words');
 
 function calculateWordProbability (word, guesses) {
-  // Probability rules (0-100):
-  // If word has not yet been guessed: 20-25
-  // If word has been guessed, start from 100
-  // For each correct guess, reduce 20
-  // For each incorrect guess, add 25
-  // The minimum probability is 2
+  // Probability rules:
+  //
+  // If word has been guessed at least once, start from 100
+  // Otherwise, start from 0
+  //
+  // For each correct guess on word, reduce 20
+  // For each incorrect guess on word, add 25
+  // 
+  // Add random number to word (0-50)
+  // 
+  // TODO: Add a value based on last quess timestamp (the further away, the bigger the number)
+  //
+  // Take n amount of biggest values
+
+
+  var randomNumber = Math.ceil(Math.random() * 50);
 
   var wordGuesses = guesses.filter(function (guess) {
     return guess.wordId === word.id;
   });
 
   if (wordGuesses.length === 0) {
-    return 20 + Math.random() * 5;
+    return randomNumber;
   }
 
   var initialValue = 100; 
