@@ -20,7 +20,7 @@ const stripArticle = word => {
 @Injectable()
 export class Words {
 
-  constructor(private http: Http, private sentences: Sentences) {}
+  constructor(public http: Http, private sentences: Sentences) {}
 
   setWords (words) {
     WORDS = words;

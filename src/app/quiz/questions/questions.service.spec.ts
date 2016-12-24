@@ -10,10 +10,9 @@ import {
 } from '@angular/http';
 import { MockBackend } from '@angular/http/testing';
 
-import { Words } from './words.service';
-import { Sentences } from '../sentences';
+import { Questions } from './questions.service';
 
-describe('Words', () => {
+describe('Questions', () => {
   beforeEach(() => TestBed.configureTestingModule({
     providers: [
       BaseRequestOptions,
@@ -25,11 +24,10 @@ describe('Words', () => {
         },
         deps: [MockBackend, BaseRequestOptions]
       },
-      Words,
-      Sentences
+      Questions
     ]}));
 
-  it('should have http', inject([ Words ], (words: Words) => {
-    expect(!!words.http).toEqual(true);
+  it('should have http', inject([ Questions ], (questions: Questions) => {
+    expect(!!questions.http).toEqual(true);
   }));
 });
