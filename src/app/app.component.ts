@@ -23,7 +23,12 @@ import { Users } from './user';
       <nav>
         <span>
           <a [routerLink]=" ['./'] ">
-            Index
+            Words
+          </a>
+        </span>
+        <span>
+          <a [routerLink]=" ['./quiz'] ">
+            Quiz
           </a>
         </span>
         <div class='user-name-box'>

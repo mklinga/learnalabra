@@ -15,6 +15,7 @@ import { AppComponent } from './app.component';
 import { APP_RESOLVER_PROVIDERS } from './app.resolver';
 import { AppState, InternalStateType } from './app.service';
 import { HomeComponent } from './home';
+import { QuizComponent } from './quiz';
 import { NoContentComponent } from './no-content';
 import { AddNewWordComponent } from './home/add-new-word';
 import { WordlistComponent } from './home/wordlist';
@@ -43,6 +44,7 @@ type StoreType = {
     AddNewWordComponent,
     AppComponent,
     HomeComponent,
+    QuizComponent,
     NoContentComponent,
     WordDetailComponent,
     WordFilterComponent,
