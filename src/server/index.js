@@ -15,10 +15,6 @@ function initialize () {
   ]);
 }
 
-function saveWordsAndSentences () {
-  return Promise.all([ wordsService.saveWords(), sentenceService.saveSentences() ]);
-}
-
 app.use(bodyParser.json())
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
@@ -46,17 +42,13 @@ app.post('/users/:id/guesses', function (req, res) {
 app.post('/words', function (req, res) {
   var newWords = wordsService.addNewWord(req.body);
   wordsService.assignTranslations(newWords);
-  res.json(newWords);
+  return wordsService.saveWords().then(function () {
+    return res.json(newWords);
+  });
 });
 
 app.get('/words', function (req, res) {
   return res.json(wordsService.getWords());
-});
-
-app.post('/words', function (req, res) {
-  var newWords = wordsService.addNewWord(req.body);
-  wordsService.assignTranslations(newWords);
-  res.json(newWords);
 });
 
 app.get('/sentences', function (req, res) {
@@ -65,7 +57,9 @@ app.get('/sentences', function (req, res) {
 
 app.post('/sentences', function (req, res) {
   var newSentences = sentenceService.addNewSentence(req.body);
-  res.json(newSentences)
+  return sentenceService.saveSentences().then(function () {
+    return res.json(newSentences);
+  });
 });
 
 app.post('/bind-words-and-sentences', function (req, res) {
@@ -78,7 +72,9 @@ app.post('/bind-words-and-sentences', function (req, res) {
     }
   })
 
-  return res.json(wordsService.getWords());
+  return wordsService.saveWords().then(function () {
+    return res.json(wordsService.getWords());
+  });
 })
 
 app.listen(3030, function () {
