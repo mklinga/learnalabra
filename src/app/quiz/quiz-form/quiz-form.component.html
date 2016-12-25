@@ -1,8 +1,22 @@
-<div>
-  <form>
-    <div *ngFor="let question of questions">
-      <label>{{ question.question.value }}</label>
-      <input type="text">
+<div class='quiz-form'>
+  <form (ngSubmit)="onSubmit(answerForm)" #answerForm="ngForm">
+    <div class='question-box' *ngFor="let question of questions">
+      <div class='word-and-answers'>
+        <label class='question-word'>{{ question.word.value }}</label>
+        <span *ngIf='checkResults[question.id] !== undefined'>
+          <span class='correct-answers-list' *ngFor='let translation of question.translations; let last = last'>
+            {{ translation.value + (last ? '' : ', ') }}
+          </span>
+        </span>
+      </div>
+      <input [(ngModel)]='answers[question.id]' name='{{ question.id }}' class='answer-input' type="text">
+      <div class='question-result' *ngIf='checkResults[question.id] !== undefined'>
+        <span class='correct-answer' *ngIf='checkResults[question.id] === true'>Correct!</span>
+        <div class='wrong-answer' *ngIf='checkResults[question.id] === false'>
+          <span>That is not right.</span>
+        </div>
+      </div>
     </div>
+    <button type="submit">Check</button>
   </form>
 </div>

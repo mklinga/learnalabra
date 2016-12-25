@@ -1,3 +1,5 @@
+var uuidV4 = require('uuid/v4');
+
 var userService = require('./user');
 var wordService = require('./words');
 
@@ -49,7 +51,7 @@ function buildWordProbabilities (words, guesses) {
 }
 
 function getSetOfQuestions (userId, language, amount) {
-  amount = amount || 2;
+  amount = amount || 5;
   language = language || 'es';
 
   var user = userService.getUser(userId);
@@ -64,7 +66,7 @@ function getSetOfQuestions (userId, language, amount) {
     var translations = allWords.filter(function (word) {
       return (question.translations.indexOf(word.id) !== -1);
     });
-    return ({ question: question, translations: translations });
+    return ({ id: uuidV4(), word: question, translations: translations });
   });
 
   // TODO: find translation, sentence

@@ -1,0 +1,29 @@
+.quiz-form {
+  .question-box {
+    margin: 10px 0;
+  }
+
+  label.question-word {
+    margin-bottom: 3px;
+  }
+
+  .correct-answers-list {
+    color: #bbb;
+  }
+
+  .wrong-answer {
+    color: darkred;
+  }
+
+  .correct-answer {
+    color: green;
+  }
+
+  input {
+    padding: 8px;
+  }
+
+  .question-result {
+    display: inline-block;
+  }
+}

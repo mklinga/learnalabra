@@ -12,7 +12,7 @@ export interface Word {
 }
 
 export interface QuestionWord {
-  question: Word;
+  word: Word;
   translations: Array<Word>;
 }
 
