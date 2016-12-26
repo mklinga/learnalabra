@@ -4,7 +4,7 @@ import { Headers, Http, RequestOptions, Response } from '@angular/http';
 
 import { Users } from '../../user';
 
-import { User, QuestionWord } from '../../interfaces';
+import { Guess, User, QuestionWord } from '../../interfaces';
 
 @Injectable()
 export class Questions {
@@ -18,6 +18,14 @@ export class Questions {
         ? this.http.get(`http://localhost:3030/users/${user.id}/questions`)
           .map(response => response.json())
         : [];
+    });
+  }
+
+  saveGuessesToServer (guesses: Array<Guess>): Observable<any> {
+    console.log('Saving the following guesses', guesses);
+    const currentUser: BehaviorSubject<User> = this.users.getCurrentUser();
+    return currentUser.flatMap(user => {
+      return this.http.post(`http://localhost:3030/users/${user.id}/guesses`, { guesses });
     });
   }
 }

@@ -32,8 +32,10 @@ app.get('/users/:id/questions/', function (req, res) {
 
 app.post('/users/:id/guesses', function (req, res) {
   var guesses = req.body.guesses;
+  var userId = Number(req.params.id);
+
   guesses.forEach(function (guess) {
-    userService.addGuess(guess)
+    userService.addGuess(userId, guess)
   });
   userService.saveUsers();
   res.sendStatus(200).end();

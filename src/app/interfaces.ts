@@ -16,3 +16,8 @@ export interface QuestionWord {
   translations: Array<Word>;
 }
 
+export interface Guess {
+  wordId: number;
+  correct: boolean;
+  error?: any;
+}

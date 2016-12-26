@@ -1,5 +1,1 @@
-[
-  {
-    "id": 1, "name": "laite", "guesses": []
-  }
-]
+[{"id":1,"name":"laite","guesses":[{"wordId":3,"correct":false,"guessed_at":1482760872757},{"wordId":37,"correct":true,"guessed_at":1482760872758},{"wordId":46,"correct":true,"guessed_at":1482760872759},{"wordId":19,"correct":true,"guessed_at":1482760872759},{"wordId":11,"correct":true,"guessed_at":1482760872760}]}]

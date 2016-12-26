@@ -20,6 +20,7 @@ function loadUsers() {
 }
 
 function saveUsers () {
+  console.log('Saving users', users);
   return new Promise(function (resolve, reject) {
     fs.writeFile(USERS, JSON.stringify(users), function (err) {
       if (err) {
@@ -36,21 +37,21 @@ function getUser (id) {
   return users.find(function (user) { return user.id === id; });
 }
 
-function addGuess (userId, wordId, result) {
-  users.map(function (user) {
-    if (user.id !== userId) {
-      return user;
-    }
+function addGuess (userId, guess) {
+  var user = getUser(userId);
+  if (!user) {
+    return [];
+  }
 
-    var newGuess = {
-      correct: result,
-      wordId: wordId,
-      guessed_at: Date.now()
-    };
+  var newGuess = Object.assign(
+    guess,
+    { guessed_at: Date.now() }
+  );
 
-    user.guesses = user.guesses || [];
-    user.guesses.push(newGuess);
-  });
+  user.guesses = user.guesses || [];
+  user.guesses.push(newGuess);
+
+  return user.guesses;
 }
 
 module.exports = {
