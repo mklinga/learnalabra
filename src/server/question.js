@@ -14,7 +14,7 @@ function calculateWordProbability (word, guesses) {
   // 
   // Add random number to word (0-50)
   // 
-  // TODO: Add a value based on last quess timestamp (the further away, the bigger the number)
+  // TODO: Add a value based on last guess timestamp (the further away, the bigger the number)
   //
   // Take n amount of biggest values
 

@@ -11,8 +11,8 @@
       </div>
       <input [(ngModel)]='answers[question.id]' name='{{ question.id }}' class='answer-input' type="text">
       <div class='question-result' *ngIf='checkResults[question.id] !== undefined'>
-        <span class='correct-answer' *ngIf='checkResults[question.id] === true'>Correct!</span>
-        <div class='wrong-answer' *ngIf='checkResults[question.id] === false'>
+        <span class='correct-answer' *ngIf='checkResults[question.id].correct === true'>Correct!</span>
+        <div class='wrong-answer' *ngIf='checkResults[question.id].correct === false'>
           <span>That is not right.</span>
         </div>
       </div>

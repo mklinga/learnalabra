@@ -19,6 +19,9 @@ export class QuizComponent {
 
   ngOnInit () {
     this.questions.loadQuestionsFromServer()
-      .subscribe(data => this.currentQuestions = data);
+      .take(1)
+      .subscribe(data => {
+        this.currentQuestions = data;
+      });
   }
 }
