@@ -46,28 +46,23 @@ function buildWordProbabilities (words, guesses) {
   });
 }
 
-function takeEvenlyFromWeightedList (words, amount) {
+function takeEvenlyFromWeightedList (words) {
   var totalProbability = words.reduce(function(total, word) {
     return total + word.probability;
   }, 0);
 
-  var takePoints = [];
-  for (var i = 0; i < amount; i++) {
-    takePoints.push(Math.random() * totalProbability);
-  }
+  var point = Math.random() * totalProbability;
 
-  return takePoints.map(function (point) {
-    var accumulated = 0, index = 0;
-    while (true) {
-      accumulated += words[index].probability;
+  var accumulated = 0, index = 0;
+  while (true) {
+    accumulated += words[index].probability;
 
-      if (accumulated > point || index === (words.length - 1)) {
-        return words[index];
-      }
-
-      index++;
+    if (accumulated > point || index === (words.length - 1)) {
+      return words[index];
     }
-  })
+
+    index++;
+  }
 }
 
 function getSetOfQuestions (userId, language, amount) {
@@ -81,7 +76,18 @@ function getSetOfQuestions (userId, language, amount) {
     .filter(function (word) { return word.lang === language; });
 
   var weightedWords = buildWordProbabilities(wordsWithQuestionLanguage, user.guesses);
-  var questionWords = takeEvenlyFromWeightedList(weightedWords, amount);
+  var questionWords = [];
+  for (var i = 0; i < amount; i++) {
+    var nextWord = takeEvenlyFromWeightedList(weightedWords);
+    questionWords.push(nextWord);
+
+    // Remove the picked words from the pool so we don't get duplicates
+    weightedWords = weightedWords.filter(function (weightedWord) {
+      return !questionWords.find(function (questionWord) {
+        return questionWord.id === weightedWord.id;
+      })
+    });
+  }
   var questionWordsWithTranslations = questionWords.map(function (question) {
     var translations = allWords.filter(function (word) {
       return (question.translations.indexOf(word.id) !== -1);
