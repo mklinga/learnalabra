@@ -1,7 +1,7 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { Observable } from 'rxjs/Rx';
 
-import { AnswerMap, Guess, QuestionMap, QuestionWord } from '../../interfaces';
+import { AnswerMap, Guess, GuessFormMap, QuestionMap, QuestionWord } from '../../interfaces';
 import { Questions } from '../questions';
 
 @Component({
@@ -18,6 +18,7 @@ export class QuizFormComponent {
   checkResults: AnswerMap = {};
   answers = {};
   @Input('questions') questions: Array<QuestionWord>;
+  @Output('done') quizDone = new EventEmitter();
 
   constructor(public questionService: Questions) {}
 
@@ -27,11 +28,30 @@ export class QuizFormComponent {
   }
 
   onSubmit(form) {
-    this.questionService.checkAnswers(this.makeQuestionMap(this.questions), form.value)
-      .take(1)
-      .subscribe((checkResults: AnswerMap) => {
-        this.checkResults = checkResults;
-        this.hasBeenChecked = true;
-      });
+    const guesses: GuessFormMap = form.value;
+    const correctAnswers: AnswerMap = this.questionService
+      .checkAnswers(this.makeQuestionMap(this.questions), guesses);
+
+    if (!this.hasBeenChecked) {
+      const guessesToSave: Array<Guess> = Object
+        .keys(guesses)
+        .map(key => correctAnswers[key]);
+
+      this.questionService
+        .saveGuessesToServer(guessesToSave)
+        .subscribe(() => {
+          this.checkResults = correctAnswers;
+          this.hasBeenChecked = true;
+        });
+    }
+
+    const allCorrect: boolean = Object
+      .keys(correctAnswers)
+      .reduce((result: boolean, key: string) => result && correctAnswers[key].correct, true);
+
+    if (allCorrect) {
+      this.answers = {};
+      this.quizDone.emit('all done here!');
+    }
   }
 }

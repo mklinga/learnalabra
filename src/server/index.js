@@ -37,7 +37,7 @@ app.post('/users/:id/guesses', function (req, res) {
   guesses.forEach(function (guess) {
     userService.addGuess(userId, guess)
   });
-  userService.saveUsers();
+  //userService.saveUsers();
   res.sendStatus(200).end();
 })
 

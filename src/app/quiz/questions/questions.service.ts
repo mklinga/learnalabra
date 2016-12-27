@@ -72,7 +72,7 @@ export class Questions {
     return { wordId: question.word.id, correct: false, error: GuessError.UNRECOGNIZED };
   }
 
-  checkAnswers (questions: QuestionMap, guesses: GuessFormMap): Observable<AnswerMap> {
+  checkAnswers (questions: QuestionMap, guesses: GuessFormMap): AnswerMap {
     const correctAnswerMap: AnswerMap = Object.keys(guesses).reduce((result, key) => {
       return Object.assign(
         result,
@@ -80,9 +80,6 @@ export class Questions {
       );
     }, {});
 
-    const guessesToSave: Array<Guess> = Object.keys(guesses).map(key => correctAnswerMap[key]);
-
-    return this.saveGuessesToServer(guessesToSave)
-      .map(() => correctAnswerMap);
+    return correctAnswerMap;
   }
 }

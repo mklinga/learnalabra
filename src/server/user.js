@@ -20,7 +20,6 @@ function loadUsers() {
 }
 
 function saveUsers () {
-  console.log('Saving users', users);
   return new Promise(function (resolve, reject) {
     fs.writeFile(USERS, JSON.stringify(users), function (err) {
       if (err) {

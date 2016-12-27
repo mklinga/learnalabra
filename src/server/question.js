@@ -29,25 +29,41 @@ function calculateWordProbability (word, guesses) {
     return randomNumber;
   }
 
-  var initialValue = 100; 
+  var initialValue = randomNumber + 100; 
   var correctGuesses = wordGuesses.filter(function (guess) {
     return guess.correct;
   });
   var incorrectGuesses = wordGuesses.length - correctGuesses.length;
 
-  return Math.max(initialValue - (20 * correctGuesses.length) + (25 * incorrectGuesses), 2);
+  return Math.max(initialValue - (20 * correctGuesses.length) + (25 * incorrectGuesses), 1);
 }
 
 function buildWordProbabilities (words, guesses) {
-  return words
-    .map(function (word) {
-      return Object.assign(word,
-        { probability: calculateWordProbability(word, guesses) }
-      );
-    })
-    .sort(function (a, b) {
-      return b.probability - a.probability;
-    });
+  return words.map(function (word) {
+    return Object.assign(word,
+      { probability: calculateWordProbability(word, guesses) }
+    );
+  });
+}
+
+function takeEvenlyFromWeightedList (words, amount) {
+  var totalProbability = words.reduce(function(total, word) {
+    return total + word.probability;
+  }, 0);
+
+  var takePoints = [];
+  for (var i = 0; i < amount; i++) {
+    takePoints.push(Math.random() * totalProbability);
+  }
+
+  return takePoints.map(function (point) {
+    var accumulated = 0, index = -1;
+    while (point > accumulated && index !== (words.length - 1)) {
+      index++;
+      accumulated += words[index].probability;
+    }
+    return words[index];
+  })
 }
 
 function getSetOfQuestions (userId, language, amount) {
@@ -61,7 +77,7 @@ function getSetOfQuestions (userId, language, amount) {
     .filter(function (word) { return word.lang === language; });
 
   var weightedWords = buildWordProbabilities(wordsWithQuestionLanguage, user.guesses);
-  var questionWords = weightedWords.slice(0, amount);
+  var questionWords = takeEvenlyFromWeightedList(weightedWords, amount);
   var questionWordsWithTranslations = questionWords.map(function (question) {
     var translations = allWords.filter(function (word) {
       return (question.translations.indexOf(word.id) !== -1);

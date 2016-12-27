@@ -9,7 +9,7 @@
           </span>
         </span>
       </div>
-      <input [(ngModel)]='answers[question.id]' name='{{ question.id }}' class='answer-input' type="text">
+      <input required [(ngModel)]='answers[question.id]' name='{{ question.id }}' class='answer-input' type="text">
       <div class='question-result' *ngIf='checkResults[question.id] !== undefined'>
         <span class='correct-answer' *ngIf='checkResults[question.id].correct === true'>Correct!</span>
         <div class='wrong-answer' *ngIf='checkResults[question.id].correct === false'>
@@ -17,6 +17,6 @@
         </div>
       </div>
     </div>
-    <button type="submit">Check</button>
+    <button type="submit" [disabled]="!answerForm.form.valid">Check</button>
   </form>
 </div>

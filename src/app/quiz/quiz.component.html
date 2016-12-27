@@ -1,4 +1,4 @@
 <div>
   <h2>Quiz</h2>
-  <quiz-form [questions]="currentQuestions"></quiz-form>
+  <quiz-form (done)="onQuizFinished($event)" [questions]="currentQuestions"></quiz-form>
 </div>

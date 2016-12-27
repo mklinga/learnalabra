@@ -18,10 +18,18 @@ export class QuizComponent {
   constructor(public questions: Questions) {}
 
   ngOnInit () {
+    this.loadQuestions();
+  }
+
+  loadQuestions () {
     this.questions.loadQuestionsFromServer()
       .take(1)
       .subscribe(data => {
         this.currentQuestions = data;
       });
+  }
+
+  onQuizFinished (value) {
+    this.loadQuestions();
   }
 }
