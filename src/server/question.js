@@ -57,12 +57,16 @@ function takeEvenlyFromWeightedList (words, amount) {
   }
 
   return takePoints.map(function (point) {
-    var accumulated = 0, index = -1;
-    while (point > accumulated && index !== (words.length - 1)) {
-      index++;
+    var accumulated = 0, index = 0;
+    while (true) {
       accumulated += words[index].probability;
+
+      if (accumulated > point || index === (words.length - 1)) {
+        return words[index];
+      }
+
+      index++;
     }
-    return words[index];
   })
 }
 
