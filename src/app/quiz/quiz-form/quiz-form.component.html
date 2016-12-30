@@ -7,11 +7,15 @@
           <span class='correct-answers-list' *ngFor='let translation of question.translations; let last = last'>
             {{ translation.value + (last ? '' : ', ') }}
           </span>
+          <div class='correct-sentences-list' >
+            <span *ngFor='let sentence of question.sentences; let last = last'>
+              {{ sentence.value + (last ? '' : ', ') }}
+            </span>
+          </div>
         </span>
       </div>
-      <input required [(ngModel)]='answers[question.id]' name='{{ question.id }}' class='answer-input' type="text">
+      <input #answerInput required [(ngModel)]='answers[question.id]' name='{{ question.id }}' class='answer-input' type="text">
       <div class='question-result' *ngIf='checkResults[question.id] !== undefined'>
-        <span class='correct-answer' *ngIf='checkResults[question.id].correct === true'>Correct!</span>
         <div class='wrong-answer' *ngIf='checkResults[question.id].correct === false'>
           <span>That is not right.</span>
         </div>

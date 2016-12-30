@@ -1,22 +1,28 @@
 .quiz-form {
+
+  text-align: center;
+
   .question-box {
     margin: 10px 0;
   }
 
   label.question-word {
-    margin-bottom: 3px;
+    display: block;
+    margin: 15px 0;
+    font-size: 24px;    
   }
 
   .correct-answers-list {
     color: #bbb;
   }
 
-  .wrong-answer {
-    color: darkred;
+  .correct-sentences-list {
+    font-style: italic;
+    margin: 20px 0;
   }
 
-  .correct-answer {
-    color: green;
+  .wrong-answer {
+    color: darkred;
   }
 
   input {
@@ -24,6 +30,10 @@
   }
 
   .question-result {
-    display: inline-block;
+    margin: 10px 0;
+  }
+
+  button[type="submit"] {
+    display: none;
   }
 }

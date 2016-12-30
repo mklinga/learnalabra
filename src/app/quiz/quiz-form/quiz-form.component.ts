@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
+import { ViewChildren, Component, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { Observable } from 'rxjs/Rx';
 
 import { AnswerMap, Guess, GuessFormMap, QuestionMap, QuestionWord } from '../../interfaces';
@@ -17,8 +17,10 @@ export class QuizFormComponent {
   hasBeenChecked: boolean = false;
   checkResults: AnswerMap = {};
   answers = {};
+  needsResetFocus: boolean = true;
   @Input('questions') questions: Array<QuestionWord>;
   @Output('done') quizDone = new EventEmitter();
+  @ViewChildren('answerInput') answerInput;
 
   constructor(public questionService: Questions) {}
 
@@ -26,6 +28,14 @@ export class QuizFormComponent {
     // We reset the hasBeenChecked/checkResults when we get new questions
     this.hasBeenChecked = false;
     this.checkResults = {};
+    this.needsResetFocus = true;
+  }
+
+  ngAfterViewChecked() {
+    if (this.needsResetFocus && this.answerInput && this.answerInput.first) {
+      this.answerInput.first.nativeElement.focus();
+      this.needsResetFocus = false;
+    }
   }
 
   makeQuestionMap (questions): QuestionMap {

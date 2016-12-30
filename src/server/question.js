@@ -2,6 +2,7 @@ var uuidV4 = require('uuid/v4');
 
 var userService = require('./user');
 var wordService = require('./words');
+var sentenceService = require('./sentence');
 
 function calculateWordProbability (word, guesses) {
   // Probability rules:
@@ -66,7 +67,7 @@ function takeEvenlyFromWeightedList (words) {
 }
 
 function getSetOfQuestions (userId, language, amount) {
-  amount = amount || 5;
+  amount = amount || 1;
 
   var user = userService.getUser(userId);
   var allWords = wordService.getWords()
@@ -88,15 +89,18 @@ function getSetOfQuestions (userId, language, amount) {
       })
     });
   }
-  var questionWordsWithTranslations = questionWords.map(function (question) {
+
+  var richQuestionWords = questionWords.map(function (question) {
     var translations = allWords.filter(function (word) {
       return (question.translations.indexOf(word.id) !== -1);
     });
-    return ({ id: uuidV4(), word: question, translations: translations });
+
+    var relatedSentences = sentenceService.getSentencesByIds(question.sentences || []);
+
+    return ({ id: uuidV4(), word: question, translations: translations, sentences: relatedSentences });
   });
 
-  // TODO: find translation, sentence
-  return questionWordsWithTranslations;
+  return richQuestionWords;
 }
 
 module.exports = {

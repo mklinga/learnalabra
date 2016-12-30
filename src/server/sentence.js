@@ -39,6 +39,12 @@ function getSentences () {
   return sentences;
 }
 
+function getSentencesByIds (ids) {
+  return sentences.filter(function (sentence) {
+    return (ids.indexOf(sentence.id) > -1);
+  });
+}
+
 // The sentence is an object of format { en: 'asdf', es: 'fdsa' }
 function addNewSentence (sentence) {
 
@@ -63,6 +69,7 @@ function assignTranslations(sentences) {
 module.exports = {
   addNewSentence: addNewSentence,
   getSentences: getSentences,
+  getSentencesByIds: getSentencesByIds,
   loadSentences: loadSentences,
   saveSentences: saveSentences
 };
