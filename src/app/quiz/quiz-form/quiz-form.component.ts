@@ -45,10 +45,17 @@ export class QuizFormComponent {
 
   onSubmit(form) {
 
-    const done = (correctOnFirst): void => {
+    const done = (answers): void => {
+      console.log(answers);
       this.answers = {};
-      this.quizDone.emit(correctOnFirst);
-    }
+
+      const finalResults = Object.keys(answers).reduce((result, key) => {
+        result.total++;
+        result.correct += answers[key].correct ? 1 : 0;
+        return result;
+      }, { correct: 0, total: 0 });
+      this.quizDone.emit(finalResults);
+    };
 
     const guesses: GuessFormMap = form.value;
     const correctAnswers: AnswerMap = this.questionService
@@ -67,7 +74,7 @@ export class QuizFormComponent {
         .saveGuessesToServer(guessesToSave)
         .subscribe(() => {
           if (allCorrect) {
-            done(true);
+            done(correctAnswers);
           } else {
             // The results are checked, but we still have some errors in the form
             this.checkResults = correctAnswers;
@@ -75,7 +82,7 @@ export class QuizFormComponent {
           }
         });
     } else if (allCorrect) {
-      done(false);
+      done(this.checkResults);
     }
   }
 
@@ -83,6 +90,6 @@ export class QuizFormComponent {
     // add one to the total if has been checked
     const total = statistics.guesses.length + (this.hasBeenChecked ? 1 : 0);
 
-    return (total === 0) ? '0%' : `${+(100 * statistics.correct / total).toFixed(2)}%`;
+    return (total === 0) ? 'no answers yet' : `${+(100 * statistics.correct / total).toFixed(2)}%`;
   }
 }

@@ -77,7 +77,7 @@ function takeEvenlyFromWeightedList (words) {
 }
 
 function getSetOfQuestions (userId, language, amount) {
-  amount = amount || 1;
+  amount = amount || 5;
 
   var user = userService.getUser(userId);
   var allWords = wordService.getWords()

@@ -2,7 +2,12 @@
   <form (ngSubmit)="onSubmit(answerForm)" #answerForm="ngForm">
     <div class='question-box' *ngFor="let question of questions">
       <div class='word-and-answers'>
-        <label class='question-word'>{{ question.word.value }}</label>
+        <label class='question-word'>
+          {{ question.word.value }}
+        </label>
+        <span class='word-statistics'>
+          {{ showQuestionStats(question.statistics) }}
+        </span>
         <span *ngIf='checkResults[question.id] !== undefined'>
           <span class='correct-answers-list' *ngFor='let translation of question.translations; let last = last'>
             {{ translation.value + (last ? '' : ', ') }}
@@ -20,9 +25,6 @@
           <span>That is not right.</span>
         </div>
       </div>
-      <span class='word-statistics'>
-        {{ showQuestionStats(question.statistics) }}
-      </span>
     </div>
     <button type="submit" [disabled]="!answerForm.form.valid">Check</button>
   </form>

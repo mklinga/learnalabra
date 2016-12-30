@@ -32,11 +32,10 @@ export class QuizComponent {
       });
   }
 
-  onQuizFinished (correctAnswer) {
-    this.totalAnswered++;
-    if (correctAnswer) {
-      this.correctAnswers++;
-    }
+  onQuizFinished (results) {
+    this.totalAnswered += results.total;
+    this.correctAnswers += results.correct;
+
     this.currentSessionInfo = `${this.correctAnswers} / ${this.totalAnswered}`;
     this.loadQuestions();
   }
