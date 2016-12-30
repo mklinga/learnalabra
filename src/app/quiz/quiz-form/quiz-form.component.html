@@ -20,6 +20,9 @@
           <span>That is not right.</span>
         </div>
       </div>
+      <span class='word-statistics'>
+        {{ showQuestionStats(question.statistics) }}
+      </span>
     </div>
     <button type="submit" [disabled]="!answerForm.form.valid">Check</button>
   </form>

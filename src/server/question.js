@@ -4,6 +4,25 @@ var userService = require('./user');
 var wordService = require('./words');
 var sentenceService = require('./sentence');
 
+function getGuessStatsForWord (guesses, word) {
+  var wordGuesses = guesses.filter(function (guess) {
+    return guess.wordId === word.id;
+  });
+
+  var correct = wordGuesses.filter(function (guess) {
+    return guess.correct;
+  }).length;
+
+  var incorrect = wordGuesses.length - correct;
+
+  return ({
+    noGuesses: (wordGuesses.length === 0),
+    guesses: wordGuesses,
+    correct: correct,
+    incorrect: incorrect
+  });
+}
+
 function calculateWordProbability (word, guesses) {
   // Probability rules:
   //
@@ -19,24 +38,15 @@ function calculateWordProbability (word, guesses) {
   //
   // Take n amount of biggest values
 
-
   var randomNumber = Math.ceil(Math.random() * 50);
+  var wordGuesses = getGuessStatsForWord(guesses, word);
 
-  var wordGuesses = guesses.filter(function (guess) {
-    return guess.wordId === word.id;
-  });
-
-  if (wordGuesses.length === 0) {
+  if (wordGuesses.noGuesses) {
     return randomNumber;
   }
 
   var initialValue = randomNumber + 100; 
-  var correctGuesses = wordGuesses.filter(function (guess) {
-    return guess.correct;
-  });
-  var incorrectGuesses = wordGuesses.length - correctGuesses.length;
-
-  return Math.max(initialValue - (20 * correctGuesses.length) + (25 * incorrectGuesses), 1);
+  return Math.max(initialValue - (20 * wordGuesses.correct) + (25 * wordGuesses.incorrect), 1);
 }
 
 function buildWordProbabilities (words, guesses) {
@@ -96,8 +106,15 @@ function getSetOfQuestions (userId, language, amount) {
     });
 
     var relatedSentences = sentenceService.getSentencesByIds(question.sentences || []);
+    var guessStatistics = getGuessStatsForWord(user.guesses, question);
 
-    return ({ id: uuidV4(), word: question, translations: translations, sentences: relatedSentences });
+    return ({
+      id: uuidV4(),
+      sentences: relatedSentences,
+      statistics: guessStatistics,
+      translations: translations,
+      word: question
+    });
   });
 
   return richQuestionWords;

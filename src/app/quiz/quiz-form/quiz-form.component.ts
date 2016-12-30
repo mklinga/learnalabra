@@ -78,4 +78,11 @@ export class QuizFormComponent {
       done();
     }
   }
+
+  showQuestionStats(statistics) {
+    // add one to the total if has been checked
+    const total = statistics.guesses.length + (this.hasBeenChecked ? 1 : 0);
+
+    return (total === 0) ? '0%' : `${+(100 * statistics.correct / total).toFixed(2)}%`;
+  }
 }
