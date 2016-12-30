@@ -79,6 +79,7 @@ export class QuizFormComponent {
             // The results are checked, but we still have some errors in the form
             this.checkResults = correctAnswers;
             this.hasBeenChecked = true;
+            this.needsResetFocus = true;
           }
         });
     } else if (allCorrect) {

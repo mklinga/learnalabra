@@ -1,28 +1,30 @@
 <div class='quiz-form'>
   <form (ngSubmit)="onSubmit(answerForm)" #answerForm="ngForm">
     <div class='question-box' *ngFor="let question of questions">
-      <div class='word-and-answers'>
-        <label class='question-word'>
-          {{ question.word.value }}
-        </label>
-        <span class='word-statistics'>
-          {{ showQuestionStats(question.statistics) }}
-        </span>
-        <span *ngIf='checkResults[question.id] !== undefined'>
-          <span class='correct-answers-list' *ngFor='let translation of question.translations; let last = last'>
-            {{ translation.value + (last ? '' : ', ') }}
+      <div *ngIf="(checkResults[question.id] === undefined) || (checkResults[question.id].correct === false)">
+        <div class='word-and-answers'>
+          <label class='question-word'>
+            {{ question.word.value }}
+          </label>
+          <span class='word-statistics'>
+            {{ showQuestionStats(question.statistics) }}
           </span>
-          <div class='correct-sentences-list' >
-            <span *ngFor='let sentence of question.sentences; let last = last'>
-              {{ sentence.value + (last ? '' : ', ') }}
+          <span *ngIf='checkResults[question.id] !== undefined'>
+            <span class='correct-answers-list' *ngFor='let translation of question.translations; let last = last'>
+              {{ translation.value + (last ? '' : ', ') }}
             </span>
+            <div class='correct-sentences-list' >
+              <span *ngFor='let sentence of question.sentences; let last = last'>
+                {{ sentence.value + (last ? '' : ', ') }}
+              </span>
+            </div>
+          </span>
+        </div>
+        <input #answerInput required [(ngModel)]='answers[question.id]' name='{{ question.id }}' class='answer-input' type="text">
+        <div class='question-result' *ngIf='checkResults[question.id] !== undefined'>
+          <div class='wrong-answer' *ngIf='checkResults[question.id].correct === false'>
+            <span>That is not right.</span>
           </div>
-        </span>
-      </div>
-      <input #answerInput required [(ngModel)]='answers[question.id]' name='{{ question.id }}' class='answer-input' type="text">
-      <div class='question-result' *ngIf='checkResults[question.id] !== undefined'>
-        <div class='wrong-answer' *ngIf='checkResults[question.id].correct === false'>
-          <span>That is not right.</span>
         </div>
       </div>
     </div>
