@@ -67,13 +67,13 @@ function takeEvenlyFromWeightedList (words) {
 
 function getSetOfQuestions (userId, language, amount) {
   amount = amount || 5;
-  language = language || 'es';
 
   var user = userService.getUser(userId);
   var allWords = wordService.getWords()
 
-  var wordsWithQuestionLanguage = allWords
-    .filter(function (word) { return word.lang === language; });
+  var wordsWithQuestionLanguage = (language === undefined)
+    ? allWords
+    : allWords.filter(function (word) { return word.lang === language; });
 
   var weightedWords = buildWordProbabilities(wordsWithQuestionLanguage, user.guesses);
   var questionWords = [];
