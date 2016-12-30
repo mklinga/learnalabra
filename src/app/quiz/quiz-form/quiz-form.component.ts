@@ -46,14 +46,13 @@ export class QuizFormComponent {
   onSubmit(form) {
 
     const done = (answers): void => {
-      console.log(answers);
-      this.answers = {};
-
       const finalResults = Object.keys(answers).reduce((result, key) => {
         result.total++;
         result.correct += answers[key].correct ? 1 : 0;
         return result;
       }, { correct: 0, total: 0 });
+
+      this.answers = {};
       this.quizDone.emit(finalResults);
     };
 
@@ -85,6 +84,14 @@ export class QuizFormComponent {
     } else if (allCorrect) {
       done(this.checkResults);
     }
+
+    // Clean up wrong answers
+    Object.keys(correctAnswers).forEach((key: string) => {
+      if (!correctAnswers[key].correct) {
+        this.answers[key] = '';
+      }
+    });
+
   }
 
   showQuestionStats(statistics) {
