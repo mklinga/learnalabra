@@ -59,6 +59,7 @@ app.get('/sentences', function (req, res) {
 
 app.post('/sentences', function (req, res) {
   var newSentences = sentenceService.addNewSentence(req.body);
+  sentenceService.assignTranslations(newSentences);
   return sentenceService.saveSentences().then(function () {
     return res.json(newSentences);
   });

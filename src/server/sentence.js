@@ -62,12 +62,25 @@ function addNewSentence (sentence) {
   return newSentenceArray;
 }
 
-function assignTranslations(sentences) {
+function assignTranslations(translations) {
+  // We expect to get an array of sentences which mean the same thing in different languages
+  var translationIds = translations.map(function (sentence) { return sentence.id });
+  sentences = sentences.map(function(sentence) {
+    if (translationIds.indexOf(sentence.id) === -1) {
+      return sentence;
+    }
 
+    var sentenceTranslations = translationIds.filter(function(id) { return id !== sentence.id; });
+    return Object.assign(
+      sentence,
+      { translations: sentenceTranslations }
+    );
+  });
 }
 
 module.exports = {
   addNewSentence: addNewSentence,
+  assignTranslations: assignTranslations,
   getSentences: getSentences,
   getSentencesByIds: getSentencesByIds,
   loadSentences: loadSentences,
