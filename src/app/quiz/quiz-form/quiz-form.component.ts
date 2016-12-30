@@ -45,9 +45,9 @@ export class QuizFormComponent {
 
   onSubmit(form) {
 
-    const done = (): void => {
+    const done = (correctOnFirst): void => {
       this.answers = {};
-      this.quizDone.emit('all done here!');
+      this.quizDone.emit(correctOnFirst);
     }
 
     const guesses: GuessFormMap = form.value;
@@ -67,7 +67,7 @@ export class QuizFormComponent {
         .saveGuessesToServer(guessesToSave)
         .subscribe(() => {
           if (allCorrect) {
-            done();
+            done(true);
           } else {
             // The results are checked, but we still have some errors in the form
             this.checkResults = correctAnswers;
@@ -75,7 +75,7 @@ export class QuizFormComponent {
           }
         });
     } else if (allCorrect) {
-      done();
+      done(false);
     }
   }
 

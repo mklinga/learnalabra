@@ -14,6 +14,9 @@ import { Word, QuestionWord } from '../interfaces';
 export class QuizComponent {
 
   currentQuestions: Array<QuestionWord> = [];
+  correctAnswers: number = 0;
+  totalAnswered: number = 0;
+  currentSessionInfo: string = '';
 
   constructor(public questions: Questions) {}
 
@@ -29,7 +32,12 @@ export class QuizComponent {
       });
   }
 
-  onQuizFinished (value) {
+  onQuizFinished (correctAnswer) {
+    this.totalAnswered++;
+    if (correctAnswer) {
+      this.correctAnswers++;
+    }
+    this.currentSessionInfo = `${this.correctAnswers} / ${this.totalAnswered}`;
     this.loadQuestions();
   }
 }
