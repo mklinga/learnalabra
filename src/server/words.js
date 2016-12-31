@@ -1,5 +1,5 @@
 var fs = require('fs');
-var WORDS = '../assets/words.json';
+var WORDS = '../../words.json';
 
 var words = [];
 var lastWordId;

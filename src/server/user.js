@@ -1,6 +1,6 @@
 var fs = require('fs');
 
-var USERS = '../assets/users.json';
+var USERS = '../../users.json';
 var users = [];
 var lastUserId;
 
