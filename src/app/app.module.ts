@@ -14,14 +14,17 @@ import { ROUTES } from './app.routes';
 import { AppComponent } from './app.component';
 import { APP_RESOLVER_PROVIDERS } from './app.resolver';
 import { AppState, InternalStateType } from './app.service';
+
 import { HomeComponent } from './home';
 import { QuizComponent } from './quiz';
-import { QuizFormComponent } from './quiz/quiz-form';
-import { NoContentComponent } from './no-content';
+import { StatsComponent } from './stats';
+
 import { AddNewWordComponent } from './home/add-new-word';
-import { WordlistComponent } from './home/wordlist';
-import { WordFilterComponent } from './home/word-filter';
+import { NoContentComponent } from './no-content';
+import { QuizFormComponent } from './quiz/quiz-form';
 import { WordDetailComponent } from './home/worddetail';
+import { WordFilterComponent } from './home/word-filter';
+import { WordlistComponent } from './home/wordlist';
 import { XLarge } from './home/x-large';
 
 // Application wide providers
@@ -45,6 +48,7 @@ type StoreType = {
     AddNewWordComponent,
     AppComponent,
     HomeComponent,
+    StatsComponent,
     QuizComponent,
     QuizFormComponent,
     NoContentComponent,

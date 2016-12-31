@@ -17,13 +17,18 @@ import { User } from './interfaces';
     <div class='container'>
       <nav>
         <span>
+          <a [routerLink]=" ['./quiz'] ">
+            Quiz
+          </a>
+        </span>
+        <span>
           <a [routerLink]=" ['./'] ">
             Words
           </a>
         </span>
         <span>
-          <a [routerLink]=" ['./quiz'] ">
-            Quiz
+          <a [routerLink]=" ['./stats'] ">
+            Stats
           </a>
         </span>
         <div class='user-name-box'>
