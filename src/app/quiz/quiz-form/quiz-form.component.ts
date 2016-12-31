@@ -33,8 +33,10 @@ export class QuizFormComponent {
 
   ngAfterViewChecked() {
     if (this.needsResetFocus && this.answerInput && this.answerInput.first) {
-      this.answerInput.first.nativeElement.focus();
-      this.needsResetFocus = false;
+      setTimeout(() => {
+        this.answerInput.first.nativeElement.focus();
+        this.needsResetFocus = false;
+      });
     }
   }
 
