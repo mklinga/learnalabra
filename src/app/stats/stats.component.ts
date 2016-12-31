@@ -31,12 +31,4 @@ export class StatsComponent {
         : +(100 * this.rightGuesses / this.guesses.length).toFixed(2) + '%';
     });
   }
-
-  ngOnDestroy () {
-    console.log('onDestroy');
-  }
-
-  ngAfterViewChecked () {
-    console.log('afterViewChecked');
-  }
 }
