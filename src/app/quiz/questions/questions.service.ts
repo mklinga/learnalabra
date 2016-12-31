@@ -44,12 +44,10 @@ export class Questions {
     });
   }
 
-  saveGuessesToServer (guesses: Array<Guess>): Observable<Response> {
-    console.log('Saving the following guesses', guesses);
-    const currentUser: BehaviorSubject<User> = this.users.getCurrentUser();
-    return currentUser.flatMap(user => {
-      return this.http.post(`http://localhost:3030/users/${user.id}/guesses`, { guesses });
-    });
+  saveGuessesToServer (guesses: Array<Guess>): Observable<User> {
+    const user: User = this.users.getCurrentUser().getValue();
+    return this.http.post(`http://localhost:3030/users/${user.id}/guesses`, { guesses })
+      .flatMap(response => this.users.setUserFromResponse(response));
   }
 
   checkErrors (guess: string, question: QuestionWord) {

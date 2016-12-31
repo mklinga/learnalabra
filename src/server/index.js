@@ -38,7 +38,7 @@ app.post('/users/:id/guesses', function (req, res) {
     userService.addGuess(userId, guess)
   });
   userService.saveUsers();
-  res.sendStatus(200).end();
+  return res.json(userService.getUser(Number(req.params.id)));
 })
 
 app.post('/words', function (req, res) {

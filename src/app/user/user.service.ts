@@ -13,6 +13,7 @@ export class Users {
 
   setUserFromResponse (response) {
     const body = response.json();
+    console.log('Setting the user!', body);
     USER.next(body);
     return USER;
   }
