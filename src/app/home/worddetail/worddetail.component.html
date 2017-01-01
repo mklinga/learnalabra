@@ -1,13 +1,9 @@
 <div class='word-detail-container'>
   <div class='word-and-translation'>
-    <div *ngIf="currentWord" class='current-word'>
-      <span>{{ currentWord.value }}</span>
+    <div *ngIf="currentWord">
+      <span class='current-word'>{{ currentWord.value }}</span>
+      <span class='word-probability'>({{ currentWord.probability }})</span>
+      <span *ngFor="let translation of currentTranslations" class='current-translation'>{{ translation.value }}</span>
     </div>
-    <div *ngIf="currentTranslation" class='current-translation'>
-      <span>{{ currentTranslation.value }}</span>
-    </div>
-  </div>
-  <div class='example'>
-
   </div>
 </div>

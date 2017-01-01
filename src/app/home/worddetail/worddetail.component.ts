@@ -16,12 +16,12 @@ export class WordDetailComponent {
 
   @Input('id') wordId: number;
   currentWord;
-  currentTranslation;
+  currentTranslations;
 
   constructor(public appState: AppState, public words: Words) {}
 
   ngOnInit () {
     this.currentWord = this.words.getWord(this.wordId);
-    this.currentTranslation = this.words.findTranslation(this.wordId);
+    this.currentTranslations = this.words.findTranslations(this.wordId);
   }
 }

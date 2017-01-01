@@ -6,12 +6,12 @@ import { Sentences } from '../sentences';
 
 let WORDS = [];
 
-const stripArticle = word => {
-  switch (word.lang) {
+const stripArticle = (lang: string, word: string) => {
+  switch (lang) {
     case 'es':
-      return word.replace(/^(la|el)\s*/i, '');
+      return word.replace(/^(la|el)\s+/i, '');
     case 'en':
-      return word.replace(/^(a|the)\s*/i, '');
+      return word.replace(/^(a|the)\s+/i, '');
     default:
       return word;
   }
@@ -61,7 +61,7 @@ export class Words {
 
   getWordListsByLanguage() {
     return WORDS
-      .sort((a, b) => stripArticle(a.value).localeCompare(stripArticle(b.value)))
+      .sort((a, b) => stripArticle(a.lang, a.value).localeCompare(stripArticle(b.lang, b.value)))
       .reduce((result, word) => {
         result[word.lang] = result[word.lang] || [];
         result[word.lang].push(word);
@@ -79,8 +79,8 @@ export class Words {
     }, {});
   }
 
-  findTranslation(id: number) {
-    return WORDS.find(word => word.translation === id);
+  findTranslations(id: number) {
+    return WORDS.filter(word => word.translations.indexOf(id) !== -1);
   }
 
   getRelatedSentences (ids: Array<number>) {
