@@ -15,30 +15,35 @@ function getGuessStatsForWord (guesses, word) {
 
   var incorrect = wordGuesses.length - correct;
 
+  var lastGuess = wordGuesses.reduce(function (last, guess) {
+    return last > guess.guessed_at ? last : guess.guessed_at;
+  }, 0);
+
   return ({
-    noGuesses: (wordGuesses.length === 0),
-    guesses: wordGuesses,
     correct: correct,
-    incorrect: incorrect
+    guesses: wordGuesses,
+    incorrect: incorrect,
+    lastGuess: lastGuess,
+    noGuesses: (wordGuesses.length === 0)
   });
 }
 
 function calculateWordProbability (word, guesses) {
   // Probability rules:
   //
-  // If word has been guessed at least once, start from 100
-  // Otherwise, start from 0
+  // Calculate random number (0 - 30)
+  //
+  // If word has never been guessed, return the random number
+  // Otherwise, start from 100 + said random number
   //
   // For each correct guess on word, reduce 20
-  // For each incorrect guess on word, add 25
-  // 
-  // Add random number to word (0-50)
-  // 
-  // TODO: Add a value based on last guess timestamp (the further away, the bigger the number)
+  // For each incorrect guess on word, add 33
   //
-  // Take n amount of biggest values
+  // Add 0.33 points for each day the word has not been asked
+  //
+  // Final result is max (calculated value, random number (1 - 4))
 
-  var randomNumber = Math.ceil(Math.random() * 50);
+  var randomNumber = Math.ceil(Math.random() * 30);
   var wordGuesses = getGuessStatsForWord(guesses, word);
 
   if (wordGuesses.noGuesses) {
@@ -46,7 +51,14 @@ function calculateWordProbability (word, guesses) {
   }
 
   var initialValue = randomNumber + 100; 
-  return Math.max(initialValue - (20 * wordGuesses.correct) + (25 * wordGuesses.incorrect), 1);
+  var correctGuessModifier = -(20 * wordGuesses.correct);
+  var incorrectGuessModifier = (33 * wordGuesses.incorrect);
+
+  var daysSinceLastGuess = (Date.now() - wordGuesses.lastGuess) / 1000 / 60 / 60 / 24;
+  var timeAgoModifier = Math.round(daysSinceLastGuess * 0.33); 
+  var calculatedResult = initialValue + correctGuessModifier + incorrectGuessModifier + timeAgoModifier;
+
+  return Math.max(calculatedResult, Math.round(1 + Math.random() * 3));
 }
 
 function buildWordProbabilities (words, guesses) {
