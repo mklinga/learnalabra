@@ -18,6 +18,7 @@ export class QuizFormComponent {
   checkResults: AnswerMap = {};
   answers = {};
   needsResetFocus: boolean = true;
+  submittingAnswers: boolean = false;
   @Input('questions') questions: Array<QuestionWord>;
   @Output('done') quizDone = new EventEmitter();
   @ViewChildren('answerInput') answerInput;
@@ -46,7 +47,6 @@ export class QuizFormComponent {
   }
 
   onSubmit(form) {
-
     const done = (answers): void => {
       const finalResults = Object.keys(answers).reduce((result, key) => {
         result.total++;
@@ -67,13 +67,16 @@ export class QuizFormComponent {
       .reduce((result: boolean, key: string) => result && correctAnswers[key].correct, true);
 
     if (!this.hasBeenChecked) {
+      this.submittingAnswers = true;
       const guessesToSave: Array<Guess> = Object
         .keys(guesses)
         .map(key => correctAnswers[key]);
 
       this.questionService
         .saveGuessesToServer(guessesToSave)
-        .subscribe(() => {
+        .take(1)
+        .subscribe(data => {
+          this.submittingAnswers = false;
           if (allCorrect) {
             done(correctAnswers);
           } else {

@@ -28,6 +28,6 @@
         </div>
       </div>
     </div>
-    <button type="submit" [disabled]="!answerForm.form.valid">Check</button>
+    <button type="submit" [disabled]="!answerForm.form.valid || submittingAnswers">Check</button>
   </form>
 </div>
