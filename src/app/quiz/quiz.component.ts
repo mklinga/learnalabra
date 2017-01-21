@@ -36,7 +36,10 @@ export class QuizComponent {
     this.totalAnswered += results.total;
     this.correctAnswers += results.correct;
 
-    this.currentSessionInfo = `${this.correctAnswers} / ${this.totalAnswered}`;
+    const percentage = (this.totalAnswered)
+      ? ' (' + (+(100 * this.correctAnswers / this.totalAnswered).toFixed(2)) + '%)'
+      : '';
+    this.currentSessionInfo = `${this.correctAnswers} / ${this.totalAnswered}${percentage}`;
     this.loadQuestions();
   }
 }
